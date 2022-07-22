@@ -7,6 +7,7 @@ Ansible playbook for deploying Prometheus node exporter agent.
 Before launching the playbook, you need to configure :
 - user used by ansible on the remote server
 - node exporter version
+- hosts in the /etc/ansible/hosts
 
 **ansible-node-exporter.yml**
 ```
