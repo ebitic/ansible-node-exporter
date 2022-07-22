@@ -1,6 +1,6 @@
 # Ansible playbook for Prometheus node exporter
 
-Ansible playbook for deploying Prometheus node exporter agent.
+Ansible playbook for deploying Prometheus node exporter agent on Debian.
 
 ## Ansible requirement
 
