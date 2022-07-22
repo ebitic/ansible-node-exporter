@@ -1,0 +1,60 @@
+---
+- name: Install Prometheus node exporter
+  hosts: node-exporter-client
+  remote_user: <Your username>
+  become: yes
+  vars:
+    node_exporter_version: 1.3.1
+
+  tasks:
+  - name: Add node exporter user
+    user:
+      name: node_exporter
+      shell: /usr/sbin/nologin
+      state: present
+
+  - name: Download node exporter binary
+    get_url:
+      url: https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+      dest: /tmp
+
+  - name: Unarchive node exporter binary
+    unarchive:
+      src: /tmp/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+      dest: /tmp
+      remote_src: yes 
+
+  - name: Move binary
+    copy: 
+      remote_src: True 
+      src: /tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter 
+      dest: /usr/local/bin/node_exporter
+      owner: node_exporter
+      group: node_exporter
+      mode: '0755'
+
+  - name: Remove node exporter archive
+    file:
+      path: /tmp/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+      state: absent
+
+  - name: Remove node exporter folder
+    file:
+      path: /tmp/node_exporter-{{ node_exporter_version }}.linux-amd64
+      state: absent
+    
+  - name: Import node exporter configuration
+    template:
+      src: node_exporter.service
+      dest: /etc/systemd/system/node_exporter.service
+
+  - name: Reload daemon
+    systemd:
+      state: started
+      daemon_reload: yes
+      name: node_exporter
+
+  - name: Enable node_exporter
+    systemd:
+      name: node_exporter
+      enabled: yes
