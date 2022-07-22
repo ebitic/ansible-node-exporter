@@ -10,7 +10,7 @@ Before launching the playbook, you need to configure :
 - hosts in the /etc/ansible/hosts
 
 **ansible-node-exporter.yml**
-```
+```yml
 ---
 - name: Install Prometheus node exporter
   hosts: node-exporter-client
@@ -23,7 +23,7 @@ Before launching the playbook, you need to configure :
 In my case, i'm using an ssh key between my ansible server and the remote server.
 
 Now, you can run it
-```
+```bash
 ansible-playbook ansible-node-exporter.yml --ask-become-pass
 ```
 
